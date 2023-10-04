@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTT Platform Form</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    form {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007BFF;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .dropdown {
+      width: 30%;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Style for the "Select Movies" dropdown */
+    #movieSelect {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    /* Custom arrow icon for the dropdown */
+    .dropdown::after {
+      content: '\25BC';
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    /* Hover style for the custom dropdown */
+    #movieSelect:hover {
+      border-color: #007BFF;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <form method="post" action="{% url 'save_form_data' %}">
+    {% csrf_token %}
+    <h1>User Profiles</h1>
+    <div class="container">
+        <div class="dropdown">
+            <label for="profileSelect">Select a Profile:</label>
+            <select id="profileSelect" name="profile_name">
+                <option value="">Select a Profile</option>
+                {% for profile in profiles %}
+                <option value="{{ profile.name }}">{{ profile.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="dropdown">
+            <label for="userSelect">Select a User ID:</label>
+            <select id="userSelect" name="user_id">
+                {% for profile in profiles %}
+                <option value="{{ profile.user_id }}" selected>{{ profile.user_id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="dropdown">
+          <label for="movieSelect">Select Movie(s):</label>
+          <select id="movieSelect" name="movie_title" multiple>
+              {% for movie in movies %}
+              <option value="{{ movie.title }}">{{ movie.title }}</option>
+              {% endfor %}
+          </select>
+        </div>
+    </div>
+    <button type="submit">Block</button>
+  </form>
+
+
+  <form method="post" action="{% url 'save_selection' %}">
+    {% csrf_token %}
+   
+    <label for="profileSelect">Select a Profile:</label>
+    <select id="profileSelect" name="profile_name">
+        <option value="">Select a Profile</option>
+        {% for profile in profiles %}
+        <option value="{{ profile.name }}">{{ profile.name }}</option>
+        {% endfor %}
+    </select>
+    <label for="userSelect">Select a User ID:</label>
+    <select id="userSelect" name="user_id">
+        {% for profile in profiles %}
+        <option value="{{ profile.user_id }}" selected>{{ profile.user_id }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="genre_select">Select Genres (multiple):</label>
+    <select id="genre_select" name="genre" multiple>
+      <!-- Add options for all genres here -->
+      {% for g in genre %}
+        <option value="{{ g.id }}">{{ g.name }}</option>
+      {% endfor %}
+    </select>
+    
+    <input type="submit" value="Save Selection">
+  </form>
+</body>
+</html>
